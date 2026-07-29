@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente - Portal Logístico</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Portal de Accesos y Envíos</h1>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div class="user-menu">
+                <button class="badge-role" id="badgeUsuario" onclick="toggleMenuUsuario()" type="button">Cliente</button>
+                <div id="menuUsuario" class="dropdown-menu">
+                    <button type="button" onclick="abrirModalPass(); toggleMenuUsuario();">Cambiar Contraseña</button>
+                    <button type="button" class="dropdown-danger" onclick="cerrarSesion()">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Registro de Entrada/Salida -->
+        <div class="card">
+            <h2>Nuevo Registro de Contenedor</h2>
+            <form id="formRegistro" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Nombre del Operador</label>
+                    <input type="text" name="nombre_operador" required>
+                </div>
+                <div class="form-group">
+                    <label>Identificación (Foto)</label>
+                    <input type="file" name="identificacion" accept="image/*" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo del Cliente</label>
+                    <input type="email" name="correo_cliente" placeholder="cliente@ejemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Placas de Unidad</label>
+                    <input type="text" name="placas_unidad" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Operación</label>
+                    <select name="tipo_operacion" required>
+                        <option value="dejar">Dejar Contenedor</option>
+                        <option value="retirar">Retirar Contenedor</option>
+                        <option value="ambos">Dejar y Retirar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Número de Contenedor</label>
+                    <input type="text" name="num_contenedor" required>
+                </div>
+                <div class="form-group">
+                    <label>Línea de Transporte</label>
+                    <input type="text" name="linea_transporte" required>
+                </div>
+                <button type="submit" class="btn">Generar Registro y QR</button>
+            </form>
+        </div>
+
+        <!-- Historial -->
+        <div class="card">
+            <h2>Registros Anteriores</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Operador</th><th>Placas</th><th>Contenedor</th><th>Operación</th><th>Línea</th><th>Estado</th><th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaHistorial"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Cambiar Contraseña -->
+    <div id="modalPass" class="modal">
+        <div class="modal-content">
+            <h3>Cambiar Contraseña</h3>
+            <form id="formPass" style="text-align: left; margin-top: 1rem;">
+                <div class="form-group">
+                    <label>Contraseña Actual</label>
+                    <input type="password" id="passActual" required>
+                </div>
+                <div class="form-group">
+                    <label>Nueva Contraseña</label>
+                    <input type="password" id="passNueva" required minlength="6">
+                </div>
+                <button type="submit" class="btn btn-secondary">Actualizar Contraseña</button>
+            </form>
+            <button class="btn btn-secondary" onclick="cerrarModalPass()" style="margin-top: 0.75rem;">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Registro -->
+    <div id="modalEditar" class="modal">
+        <div class="modal-content">
+            <h3>Editar Registro</h3>
+            <form id="formEditar" enctype="multipart/form-data" style="text-align: left; margin-top: 1rem;">
+                <input type="hidden" name="id" id="editarId">
+                <div class="form-group">
+                    <label>Nombre del Operador</label>
+                    <input type="text" name="nombre_operador" id="editarOperador" required>
+                </div>
+                <div class="form-group">
+                    <label>Identificación (Foto)</label>
+                    <input type="file" name="identificacion" accept="image/*">
+                    <small class="hint-text">Déjalo en blanco para conservar la foto actual.</small>
+                </div>
+                <div class="form-group">
+                    <label>Correo del Cliente</label>
+                    <input type="email" name="correo_cliente" id="editarCorreo" required>
+                </div>
+                <div class="form-group">
+                    <label>Placas de Unidad</label>
+                    <input type="text" name="placas_unidad" id="editarPlacas" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Operación</label>
+                    <select name="tipo_operacion" id="editarOperacion" required>
+                        <option value="dejar">Dejar Contenedor</option>
+                        <option value="retirar">Retirar Contenedor</option>
+                        <option value="ambos">Dejar y Retirar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Número de Contenedor</label>
+                    <input type="text" name="num_contenedor" id="editarContenedor" required>
+                </div>
+                <div class="form-group">
+                    <label>Línea de Transporte</label>
+                    <input type="text" name="linea_transporte" id="editarLinea" required>
+                </div>
+                <button type="submit" class="btn">Guardar Cambios</button>
+            </form>
+            <button class="btn btn-secondary" onclick="cerrarModalEditar()" style="margin-top: 0.75rem;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal para QR -->
+    <div id="modalQR" class="modal">
+        <div class="modal-content">
+            <h3>Pase de Acceso QR</h3>
+            <div id="qrcode"></div>
+            <button class="btn btn-secondary" onclick="cerrarModal()" style="margin-top: 1rem;">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

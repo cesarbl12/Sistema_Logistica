@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardia - Portal Logístico</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Portal de Accesos y Envíos</h1>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div class="user-menu">
+                <button class="badge-role" id="badgeUsuario" onclick="toggleMenuUsuario()" type="button">Guardia</button>
+                <div id="menuUsuario" class="dropdown-menu">
+                    <button type="button" class="dropdown-danger" onclick="cerrarSesion()">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Escanear Pase de Acceso</h2>
+            <p id="scannerHint" class="hint-text">Apunta la cámara al código QR del cliente.</p>
+            <div id="reader"></div>
+        </div>
+
+        <!-- Panel con la información del registro escaneado -->
+        <div class="card" id="panelInfo" style="display: none;">
+            <h2>Validar Registro</h2>
+            <div class="info-grid">
+                <div><span class="info-label">Operador</span><span id="infoOperador"></span></div>
+                <div><span class="info-label">Placas</span><span id="infoPlacas"></span></div>
+                <div><span class="info-label">Contenedor</span><span id="infoContenedor"></span></div>
+                <div><span class="info-label">Operación</span><span id="infoOperacion"></span></div>
+                <div><span class="info-label">Línea de Transporte</span><span id="infoLinea"></span></div>
+                <div><span class="info-label">Correo Cliente</span><span id="infoCorreo"></span></div>
+                <div><span class="info-label">Estado</span><span id="infoEstado" class="badge-status"></span></div>
+            </div>
+            <div class="info-foto">
+                <span class="info-label">Identificación</span>
+                <img id="infoFoto" src="" alt="Identificación del operador">
+            </div>
+
+            <button id="btnOperacionRealizada" class="btn" onclick="marcarOperacionRealizada()">Operación Realizada</button>
+            <button class="btn btn-secondary" style="margin-top: 0.75rem;" onclick="volverAEscanear()">Escanear Otro</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/guardia.js"></script>
+</body>
+</html>

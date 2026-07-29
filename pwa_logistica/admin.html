@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador - Portal Logístico</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Portal de Accesos y Envíos</h1>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div class="user-menu">
+                <button class="badge-role" id="badgeUsuario" onclick="toggleMenuUsuario()" type="button">Administrador</button>
+                <div id="menuUsuario" class="dropdown-menu">
+                    <button type="button" class="dropdown-danger" onclick="cerrarSesion()">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Tarjetas resumen -->
+        <div class="stats-grid">
+            <div class="card stat-card">
+                <span class="stat-value" id="statCreacionQr">0</span>
+                <span class="stat-label">QR Creados</span>
+            </div>
+            <div class="card stat-card">
+                <span class="stat-value" id="statLecturaQr">0</span>
+                <span class="stat-label">QR Escaneados</span>
+            </div>
+            <div class="card stat-card">
+                <span class="stat-value" id="statMensajeEnviado">0</span>
+                <span class="stat-label">WhatsApp Enviados</span>
+            </div>
+            <div class="card stat-card">
+                <span class="stat-value" id="statPendientes">0</span>
+                <span class="stat-label">Registros Pendientes</span>
+            </div>
+        </div>
+
+        <!-- Bitácora de movimientos -->
+        <div class="card">
+            <div class="card-header-row">
+                <h2 style="border:none; margin:0; padding:0;">Bitácora de Movimientos</h2>
+                <div class="filter-row">
+                    <select id="filtroTipoEvento" onchange="cargarBitacora()">
+                        <option value="">Todos los eventos</option>
+                        <option value="creacion_qr">Creación de QR</option>
+                        <option value="lectura_qr">Lectura de QR</option>
+                        <option value="operacion_completada">Operación Completada</option>
+                        <option value="mensaje_enviado">Mensaje Enviado</option>
+                        <option value="mensaje_fallido">Mensaje Fallido</option>
+                        <option value="edicion_registro">Edición de Registro</option>
+                        <option value="eliminacion_registro">Eliminación de Registro</option>
+                    </select>
+                    <button class="btn btn-secondary btn-inline" onclick="cargarBitacora(); cargarEstadisticas();">Actualizar</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Evento</th><th>Detalle</th><th>Contenedor</th></tr>
+                    </thead>
+                    <tbody id="tablaBitacora"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Administración de usuarios -->
+        <div class="card">
+            <div class="card-header-row">
+                <h2 style="border:none; margin:0; padding:0;">Usuarios del Sistema</h2>
+                <button class="btn btn-inline" onclick="abrirModalUsuario()">+ Nuevo Usuario</button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Creado</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="tablaUsuarios"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Crear/Editar Usuario -->
+    <div id="modalUsuario" class="modal">
+        <div class="modal-content">
+            <h3 id="tituloModalUsuario">Nuevo Usuario</h3>
+            <form id="formUsuario" style="text-align: left; margin-top: 1rem;">
+                <input type="hidden" id="usuarioId">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="usuarioNombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input type="email" id="usuarioEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select id="usuarioRol" required>
+                        <option value="cliente">Cliente</option>
+                        <option value="operador">Operador (Guardia)</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="labelPassword">Contraseña</label>
+                    <input type="password" id="usuarioPassword" minlength="6">
+                    <small id="hintPassword" class="hint-text" style="display:none;">Déjalo en blanco para no cambiar la contraseña actual.</small>
+                </div>
+                <button type="submit" class="btn">Guardar</button>
+            </form>
+            <button class="btn btn-secondary" onclick="cerrarModalUsuario()" style="margin-top: 0.75rem;">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
